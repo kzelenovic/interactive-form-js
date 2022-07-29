@@ -49,6 +49,7 @@ const activitiesCost = document.querySelector('#activities-cost');
 const activityFieldset = document.querySelector('#activities');
 
 // listen for changes in activities. when change occurs for loop adds cost of activity to total price if checked
+
 activityFieldset.addEventListener('change', (e) => {
     const checked = e.target;
     const checkedPrice = checked.getAttribute('data-cost');
@@ -63,6 +64,7 @@ activityFieldset.addEventListener('change', (e) => {
     }
     activitiesCost.innerHTML = `Total: $${totalCost}`;
 
+    // when checked activity time & day matches other activities, disable conflicting activities
     for (let i = 0; i < activities.length; i++) {
         const activity = activities[i];
         const activityDayTime = activity.getAttribute('data-day-and-time')
@@ -175,6 +177,11 @@ form.addEventListener('submit', (e) => {
         nameField.parentElement.classList.add('not-valid');
         nameField.parentElement.classList.remove('valid');
         nameField.parentElement.lastElementChild.classList.remove('hint');
+        if (nameField.value === '') {
+            nameField.parentElement.lastElementChild.innerText = 'Name field cannot be blank.'
+        } else {
+            nameField.parentElement.lastElementChild.innerText = 'Name must only contain alphabetical characters.'
+        }
     }
 
     if (nameValidator()) {
@@ -189,7 +196,6 @@ form.addEventListener('submit', (e) => {
         emailField.parentElement.classList.remove('valid');
         emailField.parentElement.lastElementChild.classList.remove('hint');
         if (emailField.value === '') {
-            console.log('hi');
             emailField.parentElement.lastElementChild.innerText = 'Email field cannot be blank.'
         } else {
             emailField.parentElement.lastElementChild.innerText = 'Email address must be formatted properly.'
@@ -257,11 +263,17 @@ form.addEventListener('submit', (e) => {
     }
 });
 
+// provides real time feedback to user for errors, conditional error messaging for name & email fields
 nameField.addEventListener('keyup', () => {
     if (!nameValidator()) {
         nameField.parentElement.classList.add('not-valid');
         nameField.parentElement.classList.remove('valid');
         nameField.parentElement.lastElementChild.classList.remove('hint');
+        if (nameField.value === '') {
+            nameField.parentElement.lastElementChild.innerText = 'Name field cannot be blank.'
+        } else {
+            nameField.parentElement.lastElementChild.innerText = 'Name must only contain alphabetical characters.'
+        }
     }
 
     if (nameValidator()) {
@@ -276,6 +288,11 @@ emailField.addEventListener('keyup', () => {
         emailField.parentElement.classList.add('not-valid');
         emailField.parentElement.classList.remove('valid');
         emailField.parentElement.lastElementChild.classList.remove('hint');
+        if (emailField.value === '') {
+            emailField.parentElement.lastElementChild.innerText = 'Email field cannot be blank.'
+        } else {
+            emailField.parentElement.lastElementChild.innerText = 'Email address must be formatted properly.'
+        }
     }
 
     if (emailValidator()) {
