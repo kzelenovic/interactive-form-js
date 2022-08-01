@@ -141,9 +141,7 @@ const ccNumberField = document.querySelector('#cc-num');
 
 function ccNumberValidator() {
     const ccNumberValue = ccNumberField.value;
-    // regex to remove nondigits provided by Alex Wayne on stackoverflow
-    const ccNumber = parseInt(ccNumberValue.replace(/\D/g, ''));
-    const ccNumberIsValid = /^\d{13,16}$/g.test(ccNumber) && ccNumber !== '';
+    const ccNumberIsValid = /^\d{13,16}$/g.test(ccNumberValue) && ccNumberValue !== '';
     return ccNumberIsValid;
 }
 
@@ -151,20 +149,61 @@ const zipCodeField = document.querySelector('#zip');
 
 function zipCodeValidator() {
     const zipCodeValue = zipCodeField.value;
-    const zipCode = parseInt(zipCodeValue.replace(/\D/g, ''));
-    const isZipCodeValid = /^\d{5}$/.test(zipCode) && zipCode !== '';
-    return isZipCodeValid
+    const isZipCodeValid = /^\d{5}$/g.test(zipCodeValue) && zipCodeValue !== '';
+    return isZipCodeValid;
 }
 
 const cvvField = document.querySelector('#cvv');
 
 function cvvValidator() {
     const cvvValue = cvvField.value;
-    const cvv = parseInt(cvvValue.replace(/\D/g, ''));
-    const isCvvValid = /^\d{3}$/.test(cvv) && cvv !== '';
+    const isCvvValid = /^\d{3}$/g.test(cvvValue) && cvvValue !== '';
     return isCvvValid;
 }
 
+/**
+ * This function changes the styling of invalid fields.
+ * 
+ * @param {variable} field variable containing the field you want to style as invalid
+ */
+function invalidField(field){
+    field.parentElement.classList.add('not-valid');
+    field.parentElement.classList.remove('valid');
+    field.parentElement.lastElementChild.classList.remove('hint');
+}
+
+/**
+ * This function changes the styling of invalid activity fieldset.
+ * 
+ * @param {variable} fieldset variable containing the fieldset you want to style as invalid
+ */
+function invalidActivityField(fieldset){
+    fieldset.classList.add('not-valid');
+    fieldset.classList.remove('valid');
+    fieldset.lastElementChild.classList.remove('hint');
+}
+
+/**
+ * This function changes the styling of valid fields.
+ * 
+ * @param {variable} field variable containing the field you want to style as valid
+ */
+function validField(field){
+    field.parentElement.classList.add('valid');
+    field.parentElement.classList.remove('not-valid');
+    field.parentElement.lastElementChild.classList.add('hint');
+}
+
+/**
+ * This function changes the styling of valid activity fieldset.
+ * 
+ * @param {variable} fieldset variable containing the fieldset you want to style as valid
+ */
+ function validActivityField(fieldset){
+    fieldset.parentElement.classList.add('valid');
+    fieldset.parentElement.classList.remove('not-valid');
+    fieldset.lastElementChild.classList.add('hint');
+}
 
 // prevents form submission and puts error message for invalid field
 // shows checkmark by field if valid
@@ -174,9 +213,7 @@ form.addEventListener('submit', (e) => {
 
     if (!nameValidator()) {
         e.preventDefault();
-        nameField.parentElement.classList.add('not-valid');
-        nameField.parentElement.classList.remove('valid');
-        nameField.parentElement.lastElementChild.classList.remove('hint');
+        invalidField(nameField);
         if (nameField.value === '') {
             nameField.parentElement.lastElementChild.innerText = 'Name field cannot be blank.'
         } else {
@@ -185,16 +222,12 @@ form.addEventListener('submit', (e) => {
     }
 
     if (nameValidator()) {
-        nameField.parentElement.classList.add('valid');
-        nameField.parentElement.classList.remove('not-valid');
-        nameField.parentElement.lastElementChild.classList.add('hint');
+        validField(nameField);
     }
 
     if (!emailValidator()) {
         e.preventDefault();
-        emailField.parentElement.classList.add('not-valid');
-        emailField.parentElement.classList.remove('valid');
-        emailField.parentElement.lastElementChild.classList.remove('hint');
+        invalidField(emailField);
         if (emailField.value === '') {
             emailField.parentElement.lastElementChild.innerText = 'Email field cannot be blank.'
         } else {
@@ -203,72 +236,52 @@ form.addEventListener('submit', (e) => {
     }
 
     if (emailValidator()) {
-        emailField.parentElement.classList.add('valid');
-        emailField.parentElement.classList.remove('not-valid');
-        emailField.parentElement.lastElementChild.classList.add('hint');
+        validField(emailField);
     }
 
     if (!activityValidator()) {
         e.preventDefault();
-        activityFieldset.classList.add('not-valid');
-        activityFieldset.classList.remove('valid');
-        activityFieldset.lastElementChild.classList.remove('hint');
+        invalidActivityField(activityFieldset);
     }
 
     if (activityValidator()) {
-        activityFieldset.classList.add('valid');
-        activityFieldset.classList.remove('not-valid');
-        activityFieldset.lastElementChild.classList.add('hint');
+        validActivityField(activityFieldset);
     }
 
     if (paymentSelect[1].selected) {
         if (!ccNumberValidator()) {
             e.preventDefault();
-            ccNumberField.parentElement.classList.add('not-valid');
-            ccNumberField.parentElement.classList.remove('valid');
-            ccNumberField.parentElement.lastElementChild.classList.remove('hint');
+            invalidField(ccNumberField);
         }
 
         if (ccNumberValidator()) {
-            ccNumberField.parentElement.classList.add('valid');
-            ccNumberField.parentElement.classList.remove('not-valid');
-            ccNumberField.parentElement.lastElementChild.classList.add('hint');
+            validField(ccNumberField);
         }
     }
 
     if (!zipCodeValidator()) {
         e.preventDefault();
-        zipCodeField.parentElement.classList.add('not-valid');
-        zipCodeField.parentElement.classList.remove('valid');
-        zipCodeField.parentElement.lastElementChild.classList.remove('hint');
+        invalidField(zipCodeField);
     }
 
     if (zipCodeValidator()) {
-        zipCodeField.parentElement.classList.add('valid');
-        zipCodeField.parentElement.classList.remove('not-valid');
-        zipCodeField.parentElement.lastElementChild.classList.add('hint');
+        validField(zipCodeField);
     }
 
     if (!cvvValidator()) {
         e.preventDefault();
-        cvvField.parentElement.classList.add('not-valid');
-        cvvField.parentElement.classList.remove('valid');
-        cvvField.parentElement.lastElementChild.classList.remove('hint');
+        invalidField(cvvField);
     }
 
     if (cvvValidator()) {
-        cvvField.parentElement.classList.add('valid');
-        cvvField.parentElement.classList.remove('not-valid');
-        cvvField.parentElement.lastElementChild.classList.add('hint');
+        validField(cvvField);
     }
 });
 
 // provides real time feedback to user for errors, conditional error messaging for name & email fields
 nameField.addEventListener('keyup', () => {
     if (!nameValidator()) {
-        nameField.parentElement.classList.add('not-valid');
-        nameField.parentElement.classList.remove('valid');
-        nameField.parentElement.lastElementChild.classList.remove('hint');
+        invalidField(nameField);
         if (nameField.value === '') {
             nameField.parentElement.lastElementChild.innerText = 'Name field cannot be blank.'
         } else {
@@ -277,17 +290,13 @@ nameField.addEventListener('keyup', () => {
     }
 
     if (nameValidator()) {
-        nameField.parentElement.classList.add('valid');
-        nameField.parentElement.classList.remove('not-valid');
-        nameField.parentElement.lastElementChild.classList.add('hint');
+        validField(nameField);
     }
 });
 
 emailField.addEventListener('keyup', () => {
     if (!emailValidator()) {
-        emailField.parentElement.classList.add('not-valid');
-        emailField.parentElement.classList.remove('valid');
-        emailField.parentElement.lastElementChild.classList.remove('hint');
+        invalidField(emailField);
         if (emailField.value === '') {
             emailField.parentElement.lastElementChild.innerText = 'Email field cannot be blank.'
         } else {
@@ -296,65 +305,47 @@ emailField.addEventListener('keyup', () => {
     }
 
     if (emailValidator()) {
-        emailField.parentElement.classList.add('valid');
-        emailField.parentElement.classList.remove('not-valid');
-        emailField.parentElement.lastElementChild.classList.add('hint');
+        validField(emailField);
     }
 });
 
 activityFieldset.addEventListener('change', () => {
     if (!activityValidator()) {
-        activityFieldset.classList.add('not-valid');
-        activityFieldset.classList.remove('valid');
-        activityFieldset.lastElementChild.classList.remove('hint');
+        invalidActivityField(activityFieldset);
     }
 
     if (activityValidator()) {
-        activityFieldset.classList.add('valid');
-        activityFieldset.classList.remove('not-valid');
-        activityFieldset.lastElementChild.classList.add('hint');
+        validActivityField(activityFieldset);
     }
 });
 
 ccNumberField.addEventListener('keyup', () => {
     if (!ccNumberValidator()) {
-        ccNumberField.parentElement.classList.add('not-valid');
-        ccNumberField.parentElement.classList.remove('valid');
-        ccNumberField.parentElement.lastElementChild.classList.remove('hint');
+        invalidField(ccNumberField);
     }
 
     if (ccNumberValidator()) {
-        ccNumberField.parentElement.classList.add('valid');
-        ccNumberField.parentElement.classList.remove('not-valid');
-        ccNumberField.parentElement.lastElementChild.classList.add('hint');
+        validField(ccNumberField);
     }
 });
 
 zipCodeField.addEventListener('keyup', () => {
     if (!zipCodeValidator()) {
-        zipCodeField.parentElement.classList.add('not-valid');
-        zipCodeField.parentElement.classList.remove('valid');
-        zipCodeField.parentElement.lastElementChild.classList.remove('hint');
+        invalidField(zipCodeField);
     }
 
     if (zipCodeValidator()) {
-        zipCodeField.parentElement.classList.add('valid');
-        zipCodeField.parentElement.classList.remove('not-valid');
-        zipCodeField.parentElement.lastElementChild.classList.add('hint');
+        validField(zipcodeField);
     }
 });
 
 cvvField.addEventListener('keyup', () => {
     if (!cvvValidator()) {
-        cvvField.parentElement.classList.add('not-valid');
-        cvvField.parentElement.classList.remove('valid');
-        cvvField.parentElement.lastElementChild.classList.remove('hint');
+        invalidField(cvvField);
     }
 
     if (cvvValidator()) {
-        cvvField.parentElement.classList.add('valid');
-        cvvField.parentElement.classList.remove('not-valid');
-        cvvField.parentElement.lastElementChild.classList.add('hint');
+        validField(cvvField);
     }
 });
 
