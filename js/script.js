@@ -47,6 +47,7 @@ shirtDesignSelect.addEventListener('change', (e) => {
 const activities = document.querySelectorAll('#activities input');
 const activitiesCost = document.querySelector('#activities-cost');
 const activityFieldset = document.querySelector('#activities');
+let totalCost = 0;
 
 // listen for changes in activities. when change occurs for loop adds cost of activity to total price if checked
 
@@ -54,14 +55,14 @@ activityFieldset.addEventListener('change', (e) => {
     const checked = e.target;
     const checkedPrice = checked.getAttribute('data-cost');
     const checkedDayTime = checked.getAttribute('data-day-and-time');
-    let totalCost = 0;
 
-    for (let i = 0; i < activities.length; i++) {
-        const activity = activities[i];
-        if (activity.checked) {
-            totalCost += parseInt(checkedPrice);
-        }
+
+    if (checked.checked) {
+        totalCost += parseInt(checkedPrice);
+    } else {
+        totalCost -= parseInt(checkedPrice);
     }
+
     activitiesCost.innerHTML = `Total: $${totalCost}`;
 
     // when checked activity time & day matches other activities, disable conflicting activities
@@ -166,7 +167,7 @@ function cvvValidator() {
  * 
  * @param {variable} field variable containing the field you want to style as invalid
  */
-function invalidField(field){
+function invalidField(field) {
     field.parentElement.classList.add('not-valid');
     field.parentElement.classList.remove('valid');
     field.parentElement.lastElementChild.classList.remove('hint');
@@ -177,7 +178,7 @@ function invalidField(field){
  * 
  * @param {variable} fieldset variable containing the fieldset you want to style as invalid
  */
-function invalidActivityField(fieldset){
+function invalidActivityField(fieldset) {
     fieldset.classList.add('not-valid');
     fieldset.classList.remove('valid');
     fieldset.lastElementChild.classList.remove('hint');
@@ -188,7 +189,7 @@ function invalidActivityField(fieldset){
  * 
  * @param {variable} field variable containing the field you want to style as valid
  */
-function validField(field){
+function validField(field) {
     field.parentElement.classList.add('valid');
     field.parentElement.classList.remove('not-valid');
     field.parentElement.lastElementChild.classList.add('hint');
@@ -199,7 +200,7 @@ function validField(field){
  * 
  * @param {variable} fieldset variable containing the fieldset you want to style as valid
  */
- function validActivityField(fieldset){
+function validActivityField(fieldset) {
     fieldset.parentElement.classList.add('valid');
     fieldset.parentElement.classList.remove('not-valid');
     fieldset.lastElementChild.classList.add('hint');
@@ -335,7 +336,7 @@ zipCodeField.addEventListener('keyup', () => {
     }
 
     if (zipCodeValidator()) {
-        validField(zipcodeField);
+        validField(zipCodeField);
     }
 });
 
